@@ -3,7 +3,7 @@
  * Work around bugs with SWFI.
  *
  * Copyright (C) 2007 Google, Inc.
- * Copyright (c) 2007-2009, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2007-2009, Code Aurora Forum. All rights reserved.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -19,47 +19,30 @@
 #include <linux/linkage.h>
 #include <asm/assembler.h>
 
-.extern write_to_strongly_ordered_memory
-
 ENTRY(msm_arch_idle)
-	mrs	r2, cpsr		/* save the CPSR state */
-	cpsid   iaf			/* explictly disable I,A and F */
-
-#if defined(CONFIG_ARCH_MSM7X27)
 	mov     r0, #0
 	mcr     p15, 0, r0, c7, c10, 0   /* flush entire data cache */
-	mcr     p15, 0, r0, c7, c10, 4   /* dsb                */
-	stmfd   sp!, {r2, lr}            /* preserve r2, thus CPSR and LR */
-	bl      write_to_strongly_ordered_memory  /* flush AXI bus buffer */
-	ldmfd   sp!, {r2, lr}
-	mcr     p15, 0, r0, c7, c0, 4    /* wait for interrupt */
-#else
 	mrc     p15, 0, r1, c1, c0, 0    /* read current CR    */
 	bic     r0, r1, #(1 << 2)        /* clear dcache bit   */
 	bic     r0, r0, #(1 << 12)       /* clear icache bit   */
 	mcr     p15, 0, r0, c1, c0, 0    /* disable d/i cache  */
 
 	mov     r0, #0
-	mcr     p15, 0, r0, c7, c5, 0    /* invalidate icache and flush */
-	                                 /* branch target cache */
-	mcr     p15, 0, r0, c7, c14, 0   /* clean and invalidate dcache */
-
 	mcr     p15, 0, r0, c7, c10, 4   /* dsb                */
 	mcr     p15, 0, r0, c7, c0, 4    /* wait for interrupt */
 
 	mcr     p15, 0, r1, c1, c0, 0    /* restore d/i cache  */
 	mcr     p15, 0, r0, c7, c5, 4    /* isb                */
-#endif
 
-	msr	cpsr_c, r2		/* restore the CPSR state */
 	mov     pc, lr
 
 ENTRY(msm_pm_collapse)
 	ldr     r0, =saved_state
 	stmia   r0!, {r4-r14}
 
+#if defined(CONFIG_MSM_FIQ_SUPPORT)
 	cpsid   f
-
+#endif
 	mrc     p15, 0, r1, c1, c0, 0 /* MMU control */
 	mrc     p15, 0, r2, c2, c0, 0 /* ttb */
 	mrc     p15, 0, r3, c3, c0, 0 /* dacr */
@@ -75,23 +58,23 @@ ENTRY(msm_pm_collapse)
 	mrc	p15, 0, r1, c1, c0, 2	/* read CACR */
 	stmia   r0!, {r1}
 
+	mov     r0, #0
+	mcr     p15, 0, r0, c7, c10, 0   /* flush entire data cache */
 	mrc     p15, 0, r1, c1, c0, 0    /* read current CR    */
 	bic     r0, r1, #(1 << 2)        /* clear dcache bit   */
 	bic     r0, r0, #(1 << 12)       /* clear icache bit   */
 	mcr     p15, 0, r0, c1, c0, 0    /* disable d/i cache  */
 
 	mov     r0, #0
-	mcr     p15, 0, r0, c7, c5, 0    /* invalidate icache and flush */
-	                                 /* branch target cache */
-	mcr     p15, 0, r0, c7, c14, 0   /* clean and invalidate dcache */
-
 	mcr     p15, 0, r0, c7, c10, 4   /* dsb                */
 	mcr     p15, 0, r0, c7, c0, 4    /* wait for interrupt */
 
 	mcr     p15, 0, r1, c1, c0, 0    /* restore d/i cache  */
 	mcr     p15, 0, r0, c7, c5, 4    /* isb                */
 
+#if defined(CONFIG_MSM_FIQ_SUPPORT)
 	cpsie   f
+#endif
 
 	ldr     r0, =saved_state         /* restore registers */
 	ldmfd   r0, {r4-r14}
@@ -191,4 +174,3 @@ saved_state:
 #endif
 	.space  4	/* cacr */
 saved_state_end:
-
