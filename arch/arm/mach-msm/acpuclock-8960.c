@@ -152,6 +152,9 @@ static struct acpu_level acpu_freq_tbl_slow[] __initdata = {
 	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(18), 1237500, AVS(0x100018) },
 	{ 1, {  1512000, HFPLL, 1, 0x38 }, L2(18), 1250000, AVS(0x400012) },
 #endif
+#ifdef CONFIG_S87_OC_SUPP
+        { 1, {  1674000, HFPLL, 1, 0x3A }, L2(18), 1250000 },
+#endif
 	{ 0, { 0 } }
 };
 
@@ -190,6 +193,9 @@ static struct acpu_level acpu_freq_tbl_nom[] __initdata = {
 	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(18), 1187500, AVS(0x100018) },
 	{ 1, {  1512000, HFPLL, 1, 0x38 }, L2(18), 1200000, AVS(0x400012) },
 #endif
+#ifdef CONFIG_S87_OC_SUPP
+        { 1, {  1674000, HFPLL, 1, 0x3A }, L2(18), 1200000 },
+#endif
 	{ 0, { 0 } }
 };
 
@@ -216,6 +222,9 @@ static struct acpu_level acpu_freq_tbl_fast[] __initdata = {
 	{ 0, {  1404000, HFPLL, 1, 0x34 }, L2(18), 1137500, AVS(0x400012) },
 	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(18), 1137500, AVS(0x400012) },
 	{ 1, {  1512000, HFPLL, 1, 0x38 }, L2(18), 1150000, AVS(0x400012) },
+#ifdef CONFIG_S87_OC_SUPP
+        { 1, {  1674000, HFPLL, 1, 0x3A }, L2(18), 1150000 },
+#endif
 	{ 0, { 0 } }
 };
 
