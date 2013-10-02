@@ -1,0 +1,18 @@
+menuconfig S87CM_TWEAKS
+       bool "s87cm Tweaks
+       depends on MACH_M2_ATT
+       help
+         Enable tweaks (such as OC) unique to the s87cm kernel
+
+         If unsure, say 'n' here
+
+if S87CM_TWEAKS
+
+config S87_OC_SUPP
+       bool "Overclock Support"
+       help
+         Support for overclocking the cpu
+
+         If unsure, say 'n' here
+
+endif

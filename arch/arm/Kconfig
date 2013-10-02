@@ -295,6 +295,10 @@ config ARCH_RANDOM
 
 	 If unsure, say N
 
+if ARCH_MSM
+source "arch/arm/mach-msm/Kconfig.s87"
+endif
+
 source "init/Kconfig"
 
 source "kernel/Kconfig.freezer"
