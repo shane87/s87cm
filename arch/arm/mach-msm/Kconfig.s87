@@ -1,5 +1,5 @@
 menuconfig S87CM_TWEAKS
-       bool "s87cm Tweaks
+       bool "s87cm Tweaks"
        depends on MACH_M2_ATT
        help
          Enable tweaks (such as OC) unique to the s87cm kernel
