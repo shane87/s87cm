@@ -926,9 +926,9 @@ static void __init bus_init(const struct l2_level *l2_level)
 }
 
 #ifdef CONFIG_CPU_FREQ_MSM
-#if defined(CONFIG_S87_OC_SUPP && CONFIG_S87_UC_SUPP)
+#if defined(CONFIG_S87_OC_SUPP) && defined(CONFIG_S87_UC_SUPP)
 static struct cpufreq_frequency_table freq_table[NR_CPUS][37];
-#elif defined(CONFIG_S87_OC_SUPP || CONFIG_S87_UC_SUPP)
+#elif defined(CONFIG_S87_OC_SUPP) || defined(CONFIG_S87_UC_SUPP)
 static struct cpufreq_frequency_table freq_table[NR_CPUS][36];
 #else //CONFIG_S87_OC_SUPP && CONFIG_S87_UC_SUPP
 static struct cpufreq_frequency_table freq_table[NR_CPUS][35];

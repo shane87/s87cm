@@ -146,9 +146,9 @@ static struct dcvs_core core_list[CORES_MAX];
 
 static struct kobject *cores_kobj;
 
-#if defined(CONFIG_S87_OC_SUPP && CONFIG_S87_UC_SUPP)
+#if defined(CONFIG_S87_OC_SUPP) && defined(CONFIG_S87_UC_SUPP)
 #define DCVS_MAX_NUM_FREQS 24
-#elif defined(CONFIG_S87_OC_SUPP || CONFIG_S87_UC_SUPP)
+#elif defined(CONFIG_S87_OC_SUPP) || defined(CONFIG_S87_UC_SUPP)
 #define DCVS_MAX_NUM_FREQS 23
 #else
 #define DCVS_MAX_NUM_FREQS 15
