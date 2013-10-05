@@ -15,4 +15,11 @@ config S87_OC_SUPP
 
          If unsure, say 'n' here
 
+config S87_UC_SUPP
+       bool "Underclock Support"
+       help
+         Support for underclocking the cpu
+
+         If unsure, say 'n' here
+
 endif
